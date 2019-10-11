@@ -72,8 +72,6 @@ $('document').ready(function () {
 
                 // 着信処理
                 peer.on('call', function (call) {
-                    if (existingCall) return;
-
                     call.answer(localStream);
                     setupCallEventHandlers(call);
                 });
@@ -82,10 +80,10 @@ $('document').ready(function () {
                 // イベントリスナー
                 function setupCallEventHandlers(call) {
                     // 既に接続中の場合は一旦既存の接続を切断し、後からきた接続要求を優先
-                    // if (existingCall) {
-                    //     existingCall.close();
-                    // }
-                    // existingCall = call;
+                    if (existingCall) {
+                        existingCall.close();
+                    }
+                    existingCall = call;
 
                     // 相手のカメラ映像・マイク音声を受信した際に発火
                     call.on('stream', function (stream) {
